@@ -1,13 +1,14 @@
 #include <iostream>
-#include <deque>
-#include <algorithm>
+#include <stack>
+#include <vector>
 
 using namespace std;
 
 int main()
 {
     int n, maxCount;
-    deque<int> d;
+    stack<int> s;
+    vector<bool> visited(101, false);
 
     cin >> n >> maxCount;
 
@@ -15,34 +16,26 @@ int main()
     {
         int temp;
         cin >> temp;
-
-        if (d.size() < n)
-        {
-            d.push_front(temp);
-            continue;
-        }
-
-        auto iter = find(d.begin(), d.end(), temp);
-
-        if (iter != d.end())
-        {
-            for (auto it = iter; it > d.begin(); --it)
-            {
-                *it = *(it - 1);
-            }
-            *d.begin() = temp;
-            // d.erase(iter);
-            // d.push_front(temp);
-        }
-        else
-        {
-            d.pop_back();
-            d.push_front(temp);
-        }
+        s.push(temp);
     }
 
-    for (auto& item : d)
+    int count = 0;
+    while (!s.empty())
     {
-        cout << item << " ";
+        int temp = s.top();
+        s.pop();
+
+        if (visited[temp])
+        {
+            continue;
+        }
+        visited[temp] = true;
+        cout << temp << " ";
+        ++count;
+
+        if (count == n)
+        {
+            break;
+        }
     }
 }
