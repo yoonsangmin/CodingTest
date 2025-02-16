@@ -31,7 +31,7 @@ int main()
     --to;
 
     vector<int> dp(n, INF);
-    priority_queue<pair<int, int>> pq;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
 
     dp[from] = 0;
     pq.push({0, from});
