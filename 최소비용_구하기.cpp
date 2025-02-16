@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 #define INF 210000000
 
@@ -30,24 +31,20 @@ int main()
     --to;
 
     vector<int> dp(n, INF);
-    vector<bool> visited(n, false);
+    priority_queue<pair<int, int>> pq;
 
     dp[from] = 0;
+    pq.push({0, from});
 
-    for (int i = 0; i < n - 1; ++i)
+    while (!pq.empty())
     {
-        int min = INF;
-        int current = 0;
-        for (int j = 0; j < n; ++j)
+        int distance = pq.top().first;
+        int current = pq.top().second;
+        pq.pop();
+        if (dp[current] < distance)
         {
-            if (!visited[j] && min > dp[j])
-            {
-                min = dp[j];
-                current = j;
-            }
+            continue;
         }
-
-        visited[current] = true;
         
         for (int j = 0; j < n; ++j)
         {
@@ -59,6 +56,7 @@ int main()
             if (dp[j] > dp[current] + v[current][j])
             {
                 dp[j] = dp[current] + v[current][j];
+                pq.push({dp[j], j});
             }
         }
     }
