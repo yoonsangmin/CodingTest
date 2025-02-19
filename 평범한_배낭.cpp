@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <unordered_map>
 #include <algorithm>
 
 using namespace std;
@@ -10,16 +10,30 @@ int main()
     int n, k;
     scanf("%d%d", &n, &k);
 
-    vector<int> dp(k + 1, 0);
+    unordered_map<int, int> dp;
+    dp[0] = 0;
+
     for (int i = 0; i < n; ++i)
     {
         int w, v;
         scanf("%d%d", &w, &v);
-        for (int j = k; j >= w; --j)
+
+        unordered_map<int, int> new_dp = dp;
+        for (auto& [weight, value] : dp)
         {
-            dp[j] = max(dp[j], dp[j - w] + v);
+            if (weight + w <= k)
+            {
+                new_dp[weight + w] = max(new_dp[weight + w], value + v);
+            }
         }
+        dp = move(new_dp);
     }
 
-    printf("%d\n", dp[k]);
+    int maxValue = 0;
+    for (auto& [weight, value] : dp)
+    {
+        maxValue = max(maxValue, value);
+    }
+
+    printf("%d\n", maxValue);
 }
